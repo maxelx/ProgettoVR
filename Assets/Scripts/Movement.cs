@@ -34,9 +34,17 @@ public class Movement : MonoBehaviour
     
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.name == "PiedeSX" || collision.transform.name == "PiedeDX" || collision.transform.name.Contains("cubo"))
+        String nome = transform.GetComponent<Renderer>().material.mainTexture.name;
+        //Se premo con il piede corretto guadagno un punto
+        if ((collision.transform.name == "PiedeSX" && nome == "odh_icon" ) || (collision.transform.name == "PiedeDX" && nome != "odh_icon") || collision.transform.name.Contains("cubo"))
         {
             Contatore.counter++; 
+            Destroy(gameObject);
+        }
+        //Se premo con il piede sbagliato perdo punti
+        if ((collision.transform.name == "PiedeSX" && nome != "odh_icon" ) || (collision.transform.name == "PiedeDX" && nome == "odh_icon") || collision.transform.name.Contains("cubo"))
+        {
+            Contatore.counter--;
             Destroy(gameObject);
         }
     }

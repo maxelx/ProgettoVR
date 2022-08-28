@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 //Classe che definisce lo spawn di nuovi proiettili analizzando la traccia audio in esecuzione
 public class Spawner : MonoBehaviour
 {
@@ -20,22 +23,28 @@ public class Spawner : MonoBehaviour
 	private bool stato = true;
 	private bool statoP = false;
 	private bool send = true;
-	
 
-    // Update is called once per frame
+	
+	// Update is called once per frame
     void Update()
-    {	//se sono arrivato allo stato "demo"
+    {
+	    Texture newMat2 = Resources.Load<Texture2D>("odh_icon");
+	    
+	    //se sono arrivato allo stato "demo"
+
 	    if (VRbutton.counter==2 && send)
 	    {
 		    //Lancio 4 proiettili demo
 		    GameObject cube = Instantiate(cubes[0], points[Random.Range(0, 5)]);
 		    cube.transform.localPosition = new Vector3(-1,0, 0); //Random.Range(0, 28)
+		    cube.GetComponent<Renderer>().material.mainTexture = newMat2;
 		    
 		    GameObject cube2 = Instantiate(cubes[0], points[Random.Range(0, 5)]);
 		    cube2.transform.localPosition = new Vector3(0,0, 5); //Random.Range(0, 28)
-		    
+
 		    GameObject cube3 = Instantiate(cubes[0], points[Random.Range(0, 5)]);
 		    cube3.transform.localPosition = new Vector3(-1,0, 9); //Random.Range(0, 28)
+		    cube3.GetComponent<Renderer>().material.mainTexture = newMat2;
 		    
 		    GameObject cube4 = Instantiate(cubes[0], points[Random.Range(0, 5)]);
 		    cube4.transform.localPosition = new Vector3(0,0, 13); //Random.Range(0, 28)
@@ -62,7 +71,14 @@ public class Spawner : MonoBehaviour
 		    if (stato && !statoP)
 		    {
 			    GameObject cube = Instantiate(cubes[Random.Range(0, 4)], points[Random.Range(0, 4)]);
-			    cube.transform.localPosition = new Vector3(Random.Range(-0.5f, 0.5f),0, 0); //Random.Range(0, 28)
+			    float pos = Random.Range(-0.5f, 0.5f);
+			    cube.transform.localPosition = new Vector3(pos,0, 0); //Random.Range(0, 28)
+			    if (pos < 0)
+			    {
+				    // Assigns a texture named "Podium_AlbedoTransparency" to the object.
+				    cube.GetComponent<Renderer>().material.mainTexture = newMat2;
+			    }
+			    
 			    timer -= beat;
 			    Contatore.totale++;
 		    }

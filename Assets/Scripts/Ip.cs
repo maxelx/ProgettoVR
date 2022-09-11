@@ -36,11 +36,13 @@ public class Ip : MonoBehaviour
 
     private void Start()
     {
-        //tm.text = GetLocalIPv4();
+        //tm.text = GetLocalIPv4();     debug dell'ip del device
+        //creo il client udp
         udp = new UdpClient(listenPort);
         _groupEP = new IPEndPoint(IPAddress.Any, listenPort);
-        
+        //creo un thread su cui mettere il server udp
         Thread t = new Thread(new ThreadStart(ThreadProc));
+        //faccio partire il thread
         t.Start();
     }
     private void Update()
@@ -53,6 +55,8 @@ public class Ip : MonoBehaviour
         piedeLYD.text = piedeLY;
         piedeRXD.text = piedeRX;
         piedeRYD.text = piedeRY;*/
+        
+        //definisco la posizione dei piedi dalla rete ad ogni aggiornamento : PiedeDestro = PD PPiedeSinistro = PS  Rotazione= R  
         float pdX = scale(0, 1, 1,0 , float.Parse(piedeLX, System.Globalization.CultureInfo.InvariantCulture));
         float pdY = scale(0, 1, 1,0 , float.Parse(piedeLY, System.Globalization.CultureInfo.InvariantCulture));
         
@@ -62,8 +66,9 @@ public class Ip : MonoBehaviour
         float pdR = float.Parse(angleL, System.Globalization.CultureInfo.InvariantCulture);
         float psR = float.Parse(angleR, System.Globalization.CultureInfo.InvariantCulture);
         pdR = scale(0, 1, 1,0 , pdR);
-        psR = scale(0, 1, 1, 0, psR);
-
+        psR = scale(1, 0, 1, 0, psR);
+        
+        // fixing delle posizioni e assegnamento 
         piedeR.transform.position =  new Vector3((float)(pdX * 2.2 - 1), (float)(pdY + 0.2) , (float)0.692);
         piedeL.transform.position =  new Vector3((float)(psX * 2.2 - 1), (float)(psY + 0.2) , (float)0.692);
         
@@ -73,8 +78,11 @@ public class Ip : MonoBehaviour
     
     void ThreadProc() {
         while (true) {
+            // aspetto che il buffer si riempia
             var recvBuffer = udp.Receive(ref _groupEP);
+            //transformo in stirnga
             var mex  = System.Text.Encoding.UTF8.GetString(recvBuffer);
+            //faccio parsing e assegno i valori della rete alle variabili
             messaggio = mex;
             piedeLX = mex.Split(' ')[0];
             piedeLY = mex.Split(' ')[1];

@@ -15,7 +15,9 @@ public class Contatore : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //percentuale punti
         float percentuale = ((float)counter / totale)*100;
+        //switch della machina a stati finiti
         switch (VRbutton.counter)
         {
             case 0: testo = "Ciao, benvenuto! \n premi per \n continuare";

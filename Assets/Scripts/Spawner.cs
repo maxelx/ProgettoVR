@@ -51,13 +51,15 @@ public class Spawner : MonoBehaviour
 
 		    send = false;
 	    }
-
+		
+	    //se sono arrivato alla fase di gioco
 	    if (VRbutton.counter >= 3)
 	    {
 		    audio.GetSpectrumData(spectrum, 0, FFTWindow.Hamming);
 		    //audio.GetOutputData(spectrum, 0);
 		    float now = spectrum[0]*400;
 	    
+		    //Se ho un picco cambio lo stato del flag attuale
 		    if (now >=1 && timer > beat)
 		    {
 			    prev = now;
@@ -67,15 +69,18 @@ public class Spawner : MonoBehaviour
 		    {
 			    stato = false;
 		    }
-	    
+		    //se il flag attuale è diverso rispetto al precedente (per evitare lanci continui)
 		    if (stato && !statoP)
 		    {
+			    //creo l'oggetto cubo (proiettele)
 			    GameObject cube = Instantiate(cubes[Random.Range(0, 4)], points[Random.Range(0, 4)]);
+			    //posizione casuale dello spawn
 			    float pos = Random.Range(-0.5f, 0.5f);
+			    //spawn
 			    cube.transform.localPosition = new Vector3(pos,0, 0); //Random.Range(0, 28)
 			    if (pos < 0)
 			    {
-				    // Assigns a texture named "Podium_AlbedoTransparency" to the object.
+				    // Se <0 cambia la texture per il piede indicato
 				    cube.GetComponent<Renderer>().material.mainTexture = newMat2;
 			    }
 			    
@@ -89,7 +94,7 @@ public class Spawner : MonoBehaviour
     }
     IEnumerator ExampleCoroutine()
     {
-	    //yield on a new YieldInstruction that waits for 1 seconds.
+	    //coroutine non utilizzata
 	    yield return new WaitForSeconds(2);
     }
 }

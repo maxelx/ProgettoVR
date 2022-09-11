@@ -14,9 +14,10 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
+        //sposto in avanti il colpo
         transform.position += Time.deltaTime * transform.forward * 2;
         
-        
+        //check degli sbandi, nel caso succeda riposiziono alla posizione precedente
         float actual = transform.position.x;
         float differenza = Math.Abs( actual - position);
         //position += 2; actual != position
@@ -32,6 +33,7 @@ public class Movement : MonoBehaviour
 
     }
     
+    //funzione di distruzione dei colpi quando collidono con i piedi giusti, e di conseguenza aumento/diminuizione dei punti
     private void OnCollisionEnter(Collision collision)
     {
         String nome = transform.GetComponent<Renderer>().material.mainTexture.name;
